@@ -1,21 +1,23 @@
 import java.io.File;
 import java.util.Random;
 import weka.classifiers.Evaluation;
-import weka.classifiers.trees.J48;
+import weka.classifiers.lazy.IBk; // Thay thế J48 bằng IBk để sử dụng KNN
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 
-public class DecisionTree {
+public class KNNClassifier {
 
     public static void main(String args[]) {
 
         int kFolds = 5;  // kFolds
+        int k = 7;  // k
 
         try {
-            // Tạo bộ phân loại J48 bằng cách tạo đối tượng của lớp J48
-            J48 j48Classifier = new J48();
+            // Tạo bộ phân loại KNN bằng cách tạo đối tượng của lớp IBk
+            IBk knnClassifier = new IBk();
+            knnClassifier.setKNN(k); // Đặt giá trị K=3
 
-            // Đường dẫn đến tập dữ liệu
+            // Đường dẫn đến tập dữ lSiệu
             String adultDataset = "./lib/adult.csv";
 
             // Tạo đối tượng CSVLoader để đọc tập dữ liệu CSV
@@ -32,7 +34,7 @@ public class DecisionTree {
             Evaluation evaluation = new Evaluation(datasetInstances);
 
             // Kiểm tra mô hình với k lần chia dữ liệu (k folds)
-            evaluation.crossValidateModel(j48Classifier, datasetInstances, kFolds, new Random(1));
+            evaluation.crossValidateModel(knnClassifier, datasetInstances, kFolds, new Random(1));
 
             // Hiển thị tổng kết
             System.out.println("=== Summary ===");
